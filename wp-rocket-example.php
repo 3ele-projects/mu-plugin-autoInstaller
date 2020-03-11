@@ -43,10 +43,17 @@ defined( 'ABSPATH' ) or die( 'Cheatin&#8217; uh?' );
  * @param string 'wp_rocket_loaded'         Hook name to hook function into
  * @param string 'yourprefix__do_something' Function name to be hooked
  */
-add_action( 'wp_rocket_loaded', 'yourprefix__do_something' );
+
 
 class AutoWPInstance {
-#public $configdata = file_get_contents(plugin_dir_path(__FILE__).'data.json');
+    public $configdata;	
+    public $checksum;
+	public function __construct() {
+        //$this->configdata = file_get_contents(plugin_dir_path(__FILE__).'data.json');
+        $this->configdata = json_decode(file_get_contents('http://json.testing.threeelements.de/data.json'), true);
+        //$this->checksum = md5_file ( );
+	}
+
 function first_init(){
     flush_rewrite_rules(); 
 }
@@ -79,7 +86,7 @@ function add_custom_option( $option ) {
 }
 
  function eleAutomatics_deactivate_plugins() {
-     print_r('deactivate');
+    
     $plugins_array = array (
         'akismet/akismet.php', 
         'hello.php'
@@ -93,19 +100,18 @@ function add_custom_option( $option ) {
 /* activate pugins */
  function eleAutomatics_activate_plugins() {
 
-    $string = file_get_contents(plugin_dir_path(__FILE__).'data.json');
-    $plugins = json_decode($string, true);
+    
+    $plugins = $this->configdata;
     foreach ($plugins['plugins']  as $plugin) {
-        plugin_activation( $plugin['path'].'/'.$plugin['file']);
+        $this->plugin_activation( $plugin['path'].'/'.$plugin['file']);
    
     }
   
 }
 /* activate themes */
 function eleAutomatics_activate_themes() {
-  
-    $string = file_get_contents(plugin_dir_path(__FILE__).'data.json');
-    $themes = json_decode($string, true);
+
+    $themes  = $this->configdata;
     foreach ($themes['themes']  as $theme) {
         plugin_activation( $theme['path'].'/'.$theme['file']);
    
@@ -125,7 +131,7 @@ function eleAutmaticsAutoCreater_activate(){
         $options = json_decode($string, true);
 
         foreach ($options['options']  as $option) {
-            add_custom_option($option);
+            $this->add_custom_option($option);
         }
         
     }
@@ -137,12 +143,66 @@ function eleAutmaticsAutoCreater_activate(){
 
     foreach ($options['options']  as $option) {
 
-        add_custom_option($option);
+        $this->add_custom_option($option);
     }
 }
+function eleAutmaticsAutoCreaterInstall(){
+$awpi = new AutoWPInstance();
+$awpi->eleAutomatics_deactivate_plugins();
+$awpi->eleAutomatics_activate_plugins();
 
-//$awpi = new AutoWPInstance();
+}
+add_action( 'wp_install', 'eleAutmaticsAutoCreaterInstall' );
+add_action( 'admin_init', 'eleAutmaticsAutoCreaterInstall' );
+#add_action( 'admin_init', 'eleAutmaticsAutoCreater_activate' );
 
-add_action( 'wp_install', 'eleAutmaticsAutoCreater' );
-add_action( 'admin_init', 'eleAutmaticsAutoCreater_activate' );
+/* Skizze Adminpage & first Init PopUp */
 
+add_action('admin_menu', 'test_plugin_setup_menu');
+ 
+function test_plugin_setup_menu(){
+        add_menu_page( 'Test Plugin Page', 'Test Plugin', 'manage_options', 'test-plugin', 'test_init' );
+}
+ 
+function test_init(){
+        echo "<h1>Hello World!</h1>";
+}
+
+/* Skizze LogfilesW writer */
+function logger() {
+    $format = "csv"; //Moeglichkeiten: csv und txt
+ 
+$datum_zeit = date("d.m.Y H:i:s");
+$ip = $_SERVER["REMOTE_ADDR"];
+$domain = $_SERVER['REQUEST_URI'];
+
+ 
+$dateiname="logs/log_".$domain;
+ 
+$header = array("Datum", "IP", "Domain", "Bereich", "Action");
+//$infos = array($datum_zeit, $ip, $site, $browser);
+ 
+if($format == "csv") {
+ $eintrag= '"'.implode('", "', $infos).'"';
+} else { 
+ $eintrag = implode("\t", $infos);
+}
+ 
+$write_header = !file_exists($dateiname);
+ 
+$datei=fopen($dateiname,"a");
+ 
+if($write_header) {
+ if($format == "csv") {
+ $header_line = '"'.implode('", "', $header).'"';
+ } else {
+ $header_line = implode("\t", $header);
+ }
+ 
+ fputs($datei, $header_line."\n");
+}
+ 
+fputs($datei,$eintrag."\n");
+fclose($datei);
+}
+ 
