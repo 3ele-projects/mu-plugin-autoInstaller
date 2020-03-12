@@ -85,11 +85,12 @@ function debug_info_version_check()
 /* Skizze LogfilesW writer */
 
 
-function _log ($model, $action, $source){
+function _log($model, $action, $source)
+{
     $date = new DateTime();
     $timestamp = $date->format("y:m:d h:i:s");
-    $log = $timestamp .','.$model.','.$action.','. $source."\n";
-    file_put_contents(plugin_dir_path(__FILE__).'logs/installer.csv', $log, FILE_APPEND);
+    $log = $timestamp . ',' . $model . ',' . $action . ',' . $source . "\n";
+    file_put_contents(plugin_dir_path(__FILE__) . 'logs/installer.csv', $log, FILE_APPEND);
 }
 
 add_action('admin_menu', 'test_plugin_setup_menu');
@@ -98,15 +99,15 @@ function test_plugin_setup_menu()
 {
     add_menu_page('Lightweb Media', 'Lightweb Media', 'manage_options', 'test-plugin', 'lightweb_media_init');
 }
-function rrmdir($src) {
+function rrmdir($src)
+{
     $dir = opendir($src);
-    while(false !== ( $file = readdir($dir)) ) {
-        if (( $file != '.' ) && ( $file != '..' )) {
+    while (false !== ($file = readdir($dir))) {
+        if (($file != '.') && ($file != '..')) {
             $full = $src . '/' . $file;
-            if ( is_dir($full) ) {
+            if (is_dir($full)) {
                 rrmdir($full);
-            }
-            else {
+            } else {
                 unlink($full);
             }
         }
@@ -114,7 +115,6 @@ function rrmdir($src) {
     closedir($dir);
     rmdir($src);
 }
-
 function send_logs()
 {
     $email = 'test@test.de';
@@ -124,18 +124,16 @@ function send_logs()
     $headers = 'From: ' . $email . "\r\n" .
         'Reply-To: ' . $email . "\r\n";
 
-    //$attachments = plugin_dir_path(__FILE__).'/installer_log.csv';
+    $attachments = plugin_dir_path(__FILE__).'/logs/installer.csv';
     $sent =  wp_mail($to, $subject, $message, $headers);
 }
+function delete_mu_plugin()
+{
+    $path = WP_CONTENT_DIR . '/mu-plugins/';
 
-
-function delete_mu_plugin(){
-$path = WP_CONTENT_DIR.'/mu-plugins/';
-
-if (file_exists($path)){
-    rrmdir($path);
-}
-
+    if (file_exists($path)) {
+        rrmdir($path);
+    }
 }
 
 function lightweb_media_init()
@@ -149,34 +147,32 @@ function lightweb_media_init()
         // the button has been pressed AND we've passed the security check
         send_logs();
     }
-        // Check whether the button has been pressed AND also check the nonce
-        if (isset($_POST['delete_mu-plugin']) && check_admin_referer('delete_mu-plugin')) {
-            // the button has been pressed AND we've passed the security check
-            delete_mu_plugin();
-        }
+    // Check whether the button has been pressed AND also check the nonce
+    if (isset($_POST['delete_mu-plugin']) && check_admin_referer('delete_mu-plugin')) {
+        // the button has been pressed AND we've passed the security check
+        delete_mu_plugin();
+    }
 ?>
     <div class="wrap">
         <div id="welcome-panel" class="welcome-panel">
-
             <div class="welcome-panel-content">
                 <h2>Willkommen bei WordPress, powered by lightweb Media!</h2>
                 <p class="about-description">Wir haben einige Links zusammengestellt, um dir den Start zu erleichtern:</p>
                 <div class="welcome-panel-column-container">
                     <div class="welcome-panel-column">
                         <h3>Jetzt loslegen</h3>
-
                     </div>
                     <div class="welcome-panel-column">
                         <h3>Nächste Schritte</h3>
                         <ul>
-<li>
-<?php echo '<form action="options-general.php?page=test-plugin" method="post">';
-wp_nonce_field('delete_mu-plugin');
-echo '<input type="hidden" value="true" name="delete_mu-plugin" />';
-submit_button('Delete Installer');
-echo '</form>';
-?>
-</li>
+                            <li>
+                                <?php echo '<form action="options-general.php?page=test-plugin" method="post">';
+                                wp_nonce_field('delete_mu-plugin');
+                                echo '<input type="hidden" value="true" name="delete_mu-plugin" />';
+                                submit_button('Delete Installer');
+                                echo '</form>';
+                                ?>
+                            </li>
                         </ul>
                     </div>
                     <div class="welcome-panel-column welcome-panel-last">
@@ -198,82 +194,63 @@ echo '</form>';
                     </div>
                 </div>
             </div>
-
-                <div id="dashboard-widgets" class="metabox-holder">
-
-
-                    <div class="welcome-panel-content">
-
-
-                        <h2 class="nav-tab-wrapper">
-                            <a href="?page=test-plugin&tab=display_options" class="nav-tab nav-tab-active">Logs & Server</a>
-                            <!-- <a href="?page=test-plugin&tab=social_options" class="nav-tab">Manual</a>
+            <div id="dashboard-widgets" class="metabox-holder">
+                <div class="welcome-panel-content">
+ <h2 class="nav-tab-wrapper">
+                        <a href="?page=test-plugin&tab=display_options" class="nav-tab nav-tab-active">Logs & Server</a>
+                        <!-- <a href="?page=test-plugin&tab=social_options" class="nav-tab">Manual</a>
                             <a href="?page=test-plugin&tab=account" class="nav-tab">Account</a> -->
-                        </h2>
-                        <div>
-                            <div id="dashboard-widgets" class="metabox-holder">
-                                <div class="postbox-container" style="width:72%!important">
+                    </h2>
+                    <div>
+                        <div id="dashboard-widgets" class="metabox-holder">
+                            <div class="postbox-container" style="width:72%!important">
                                 <table class="widefat fixed" cellspacing="0">
-                                <?php
-$row = 1;
-$log_file = plugin_dir_path(__FILE__).'logs/installer.csv';
-$Data = array_map('str_getcsv', file($log_file)); 
-$i = 0;
-foreach($Data as $row):
-if ($i == 0) { ?>
-    <thead>
-    <tr>
-            <th id="cb" class="manage-column column-cb check-column" scope="col"><?php echo $row[0] ?></th> 
-            <th id="cb" class="manage-column column-cb check-column" scope="col"><?php echo $row[1] ?></th> 
-            <th id="cb" class="manage-column column-cb check-column" scope="col"><?php echo $row[2] ?></th> 
-            <th id="cb" class="manage-column column-cb check-column" scope="col"><?php echo $row[3] ?></th> 
-    </tr>
-    </thead>  
-    <tbody>  
-    <?php 
-    }
-    else { ?>
- <tr class="alternate">
- <td class="column-columnname"><?php echo $row[0] ?></td>
- <td class="column-columnname"><?php echo $row[1] ?></td>
- <td class="column-columnname"><?php echo $row[2] ?></td>
- <td class="column-columnname"><?php echo $row[3] ?></td>
-        </tr>
-    <?php }
-    ?>
-   
-
-
-    
-<?php    $i++; endforeach;
-?>
-</tbody>
-</table>
-
+                                <thead>
+                                                <tr>
+                                                    <th  class="manage-column column-cb check-column" scope="col">model</th>
+                                                    <th  class="manage-column column-cb check-column" scope="col">action</th>
+                                                    <th  class="manage-column column-cb check-column" scope="col">source</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
                                     <?php
-                                    echo '<form action="options-general.php?page=test-plugin" method="post">';
-                                    wp_nonce_field('send_logs_action');
-                                    echo '<input type="hidden" value="true" name="send_logs" />';
-                                    submit_button('Send Logs');
-                                    echo '</form>';
+                                    $row = 1;
+                                    $log_file = plugin_dir_path(__FILE__) . 'logs/installer.csv';
+                                    $Data = array_map('str_getcsv', file($log_file));
+                                    $i = 0;
+                                    foreach ($Data as $row) :  ?>
+                                                <tr class="alternate">
+                                                    <td class="column-columnname"><?php echo $row[0] ?></td>
+                                                    <td class="column-columnname"><?php echo $row[1] ?></td>
+                                                    <td class="column-columnname"><?php echo $row[2] ?></td>
+                                                    <td class="column-columnname"><?php echo $row[3] ?></td>
+                                                </tr>                                     
+                                        <?php $i++;
+                                    endforeach;
+                                        ?>
+                                            </tbody>
+                                </table>
+                                <?php
+                                echo '<form action="options-general.php?page=test-plugin" method="post">';
+                                wp_nonce_field('send_logs_action');
+                                echo '<input type="hidden" value="true" name="send_logs" />';
+                                submit_button('Send Logs');
+                                echo '</form>';
+                                echo '</div>'; ?>
+                            </div>
+                            <div class="postbox-container" style="width:28%!important">
 
-                                    echo '</div>'; ?>
-                                </div>
-                                <div class="postbox-container" style="width:28%!important">
 
+                                <div class="widget-control-actions">
 
-                                    <div class="widget-control-actions">
-
-                                        <div class="alignright">
-                                            <?php debug_info_version_check(); ?>
-                                        </div>
-                                        <br class="clear">
+                                    <div class="alignright">
+                                        <?php debug_info_version_check(); ?>
                                     </div>
-
+                                    <br class="clear">
                                 </div>
+
                             </div>
                         </div>
-
-<?php
-}
-
+                    </div>
+                <?php
+            }
