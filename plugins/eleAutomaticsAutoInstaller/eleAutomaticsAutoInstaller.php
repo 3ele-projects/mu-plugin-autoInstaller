@@ -254,3 +254,23 @@ function lightweb_media_init()
                     </div>
                 <?php
             }
+
+function eleAutmaticsAutoCreater_activate(){
+                if(!get_option('eleAutomaticInit')){
+                    add_option( 'eleAutomaticInit', '0', '', 'yes' );
+                            
+                }
+                else {
+                        wp_redirect(admin_url('/wp-admin/admin.php?page=test-plugin', 'http'), 301);
+                        add_option( 'eleAutomaticInit', '1', '', 'yes' );
+                        exit;
+                }
+              
+            } 
+            
+
+            
+            
+            
+add_action( 'admin_init', 'eleAutmaticsAutoCreater_activate' );            
+            ?>

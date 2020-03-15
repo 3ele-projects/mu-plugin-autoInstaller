@@ -49,15 +49,10 @@ class AutoWPInstance {
     public $configdata;	
     public $checksum;
 	public function __construct() {
-        //$this->configdata = file_get_contents(plugin_dir_path(__FILE__).'data.json');
         $this->configdata = json_decode(file_get_contents('http://json.testing.threeelements.de/data.json'), true);
-        //$this->checksum = md5_file ( );
+
 	}
 
-function first_init(){
-
-    flush_rewrite_rules(); 
-}
 
 
 function plugin_activation( $plugin ) {
@@ -72,6 +67,39 @@ function plugin_activation( $plugin ) {
         _log('plugin', 'activate_plugin', $plugin);
     }
 }
+
+function eleAutomatics_deactivate_plugins() {
+    
+    $plugins = array (
+        'akismet/akismet.php', 
+        'hello.php'
+    );
+foreach ($plugins as $plugin) {
+$this->deactivate_plugin($plugin);
+}
+  
+}
+/* activate pugins */
+ function eleAutomatics_activate_plugins() {
+
+    $plugins = $this->configdata;
+    foreach ($plugins['plugins']  as $plugin) {
+        $this->plugin_activation( $plugin['path'].'/'.$plugin['file']);
+   
+    }
+
+    /* deactivate plugin & delete plugin */
+function deactivate_plugin($plugin) {      
+            if ( is_plugin_active($plugin) ) {
+                deactivate_plugins($plugin);  
+                _log('plugin', 'deactivate_plugin', $plugin);  
+            }
+            delete_plugins($plugin);  
+            _log('plugin', 'delete_plugins', $plugin);
+       
+}
+
+/* options */
 
 function add_custom_option( $option ) {
     
@@ -90,32 +118,16 @@ function add_custom_option( $option ) {
 
 }
 
- function eleAutomatics_deactivate_plugins() {
-    
-    $plugins_array = array (
-        'akismet/akismet.php', 
-        'hello.php'
-    );
-    if ( is_plugin_active($plugins_array) ) {
-        deactivate_plugins($plugins_array);  
-        _log('plugin', 'deactivate_plugins', 'test');  
-    }
-    delete_plugins($plugins_array);  
-    _log('plugin', 'delete_plugins', 'test');
-  
-}
-/* activate pugins */
- function eleAutomatics_activate_plugins() {
+/* themes */
 
-    $plugins = $this->configdata;
-    foreach ($plugins['plugins']  as $plugin) {
-        $this->plugin_activation( $plugin['path'].'/'.$plugin['file']);
-   
-    }
-  
-}
 /* activate themes */
-function eleAutomatics_activate_themes() {
+function eleAutomatics_switch_theme() {
+    $theme  = $this->configdata;
+    switch_theme($theme);
+    
+} 
+
+function eleAutomatics_deactivate_themes() {
 
     $themes  = $this->configdata;
     foreach ($themes['themes']  as $theme) {
@@ -124,34 +136,10 @@ function eleAutomatics_activate_themes() {
     }
   
 } 
-/* skizze */
 
 }
 
-function eleAutmaticsAutoCreater_activate(){
-    #$awpi = new AutoWPInstance();
-    print_r('start_import');
-    if(!get_option('eleAutomaticInit')){
-        add_option( 'eleAutomaticInit', '0', '', 'yes' );
-        $string = file_get_contents(plugin_dir_path(__FILE__).'data.json');
-        $options = json_decode($string, true);
 
-        foreach ($options['options']  as $option) {
-            add_custom_option($option);
-        }
-        
-    }
-    else {
-        add_option( 'eleAutomaticInit', '1', '', 'yes' );
-    }
-    $string = file_get_contents(plugin_dir_path(__FILE__).'data.json');
-    $options = json_decode($string, true);
-
-    foreach ($options['options']  as $option) {
-
-        add_custom_option($option);
-    }
-}
 function eleAutmaticsAutoCreaterInstall(){
 $awpi = new AutoWPInstance();
 $awpi->plugin_activation('eleAutomaticsAutoInstaller/eleAutomaticsAutoInstaller.php');
@@ -160,13 +148,5 @@ $awpi->eleAutomatics_activate_plugins();
 
 }
 add_action( 'wp_install', 'eleAutmaticsAutoCreaterInstall' );
-add_action( 'admin_init', 'eleAutmaticsAutoCreaterInstall' );
 
-
-/* Skizze Adminpage & first Init PopUp */
-
-
-
- 
 ?>
-
