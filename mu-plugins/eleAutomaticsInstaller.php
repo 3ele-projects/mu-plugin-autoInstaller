@@ -124,7 +124,7 @@ function add_custom_option( $option ) {
 function eleAutomatics_switch_theme() {
     $theme  = $this->configdata;
     switch_theme($theme);
-    
+
 } 
 
 function eleAutomatics_deactivate_themes() {

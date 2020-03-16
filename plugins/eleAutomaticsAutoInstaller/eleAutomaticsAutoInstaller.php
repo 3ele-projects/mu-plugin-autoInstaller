@@ -239,9 +239,7 @@ function lightweb_media_init()
                                 echo '</div>'; ?>
                             </div>
                             <div class="postbox-container" style="width:28%!important">
-
-
-                                <div class="widget-control-actions">
+  <div class="widget-control-actions">
 
                                     <div class="alignright">
                                         <?php debug_info_version_check(); ?>
@@ -258,13 +256,11 @@ function lightweb_media_init()
 function eleAutmaticsAutoCreater_activate(){
                 if(!get_option('eleAutomaticInit')){
                     add_option( 'eleAutomaticInit', '0', '', 'yes' );
-                            
+                    wp_redirect(admin_url('/wp-admin/admin.php?page=test-plugin', 'http'), 301);
+                    add_option( 'eleAutomaticInit', '1', '', 'yes' );
+                    exit;        
                 }
-                else {
-                        wp_redirect(admin_url('/wp-admin/admin.php?page=test-plugin', 'http'), 301);
-                        add_option( 'eleAutomaticInit', '1', '', 'yes' );
-                        exit;
-                }
+           
               
             } 
             
