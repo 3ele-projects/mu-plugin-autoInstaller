@@ -120,8 +120,8 @@ function add_custom_option( $option ) {
 
 function eleAutomatics_do_custom_options() {
     $options  = $this->configdata;
-    foreach ($options['options']  as $options) {
-        add_custom_option( $option );
+    foreach ($options['options']  as $option) {
+        $this->add_custom_option( $option );
 }
     
 
