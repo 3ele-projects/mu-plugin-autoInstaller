@@ -112,9 +112,18 @@ function add_custom_option( $option ) {
         _log('option', 'update_option', $option ['key']);
    }
    else {
-    add_option($option ['key'], $option['value']);
+    add_option($option ['key'], stripslashes($option['value']));
     _log('option', 'add_option', $option ['key']);
    }
+
+}
+
+function eleAutomatics_do_custom_options() {
+    $options  = $this->configdata;
+    foreach ($options['options']  as $options) {
+        add_custom_option( $option );
+}
+    
 
 }
 
@@ -136,7 +145,7 @@ $awpi->plugin_activation('eleAutomaticsAutoInstaller/eleAutomaticsAutoInstaller.
 //$awpi->eleAutomatics_deactivate_plugins();
 $awpi->eleAutomatics_activate_plugins();
 $awpi->eleAutomatics_switch_theme();
-
+$awpi->eleAutomatics_do_custom_options();
 }
 add_action( 'wp_install', 'eleAutmaticsAutoCreaterInstall' );
 
