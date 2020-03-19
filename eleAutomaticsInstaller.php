@@ -87,7 +87,7 @@ $this->deactivate_plugin($plugin);
         $this->plugin_activation( $plugin['path'].'/'.$plugin['file']);
    
     }
-
+ }
     /* deactivate plugin & delete plugin */
 function deactivate_plugin($plugin) {      
             if ( is_plugin_active($plugin) ) {
