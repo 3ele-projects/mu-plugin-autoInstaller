@@ -122,29 +122,21 @@ function add_custom_option( $option ) {
 
 /* activate themes */
 function eleAutomatics_switch_theme() {
-    $theme  = $this->configdata;
-    switch_theme($theme);
-
-} 
-
-function eleAutomatics_deactivate_themes() {
-
     $themes  = $this->configdata;
     foreach ($themes['themes']  as $theme) {
-        themes_activation( $theme['path'].'/'.$theme['file']);
-   
-    }
-  
+    switch_theme($theme['name']);
 } 
-
+}
 }
 
 
 function eleAutmaticsAutoCreaterInstall(){
 $awpi = new AutoWPInstance();
-//$awpi->plugin_activation('eleAutomaticsAutoInstaller/eleAutomaticsAutoInstaller.php');
-$awpi->eleAutomatics_deactivate_plugins();
+$awpi->plugin_activation('eleAutomaticsAutoInstaller/eleAutomaticsAutoInstaller.php');
+//$awpi->eleAutomatics_deactivate_plugins();
 $awpi->eleAutomatics_activate_plugins();
+$awpi->eleAutomatics_switch_theme();
+
 }
 add_action( 'wp_install', 'eleAutmaticsAutoCreaterInstall' );
 
