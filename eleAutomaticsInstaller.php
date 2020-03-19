@@ -142,10 +142,9 @@ function eleAutomatics_deactivate_themes() {
 
 function eleAutmaticsAutoCreaterInstall(){
 $awpi = new AutoWPInstance();
-$awpi->plugin_activation('eleAutomaticsAutoInstaller/eleAutomaticsAutoInstaller.php');
+//$awpi->plugin_activation('eleAutomaticsAutoInstaller/eleAutomaticsAutoInstaller.php');
 $awpi->eleAutomatics_deactivate_plugins();
 $awpi->eleAutomatics_activate_plugins();
-
 }
 add_action( 'wp_install', 'eleAutmaticsAutoCreaterInstall' );
 
