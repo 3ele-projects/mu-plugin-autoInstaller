@@ -165,7 +165,7 @@ $awpi->eleAutomatics_activate_plugins();
 $awpi->eleAutomatics_switch_theme();
 $awpi->eleAutomatics_do_custom_options();
 }
-//add_action( 'wp_install', 'eleAutmaticsAutoCreaterInstall' );
+add_action( 'wp_install', 'eleAutmaticsAutoCreaterInstall' );
 function eleAutmaticsAutoCreaterInstallTEST(){
      $awpi = new AutoWPInstance();
     $awpi->plugin_activation('eleAutomaticsAutoInstaller/eleAutomaticsAutoInstaller.php');
@@ -174,5 +174,5 @@ function eleAutmaticsAutoCreaterInstallTEST(){
      $awpi->eleAutomatics_switch_theme();
     $awpi->eleAutomatics_do_custom_options();
     }
-add_action( 'admin_init', 'eleAutmaticsAutoCreaterInstallTEST' );
+//add_action( 'admin_init', 'eleAutmaticsAutoCreaterInstallTEST' );
 ?>
