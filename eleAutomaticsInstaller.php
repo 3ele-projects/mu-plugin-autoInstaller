@@ -135,7 +135,7 @@ function eleAutomatics_do_custom_options() {
              foreach  ($option['value'] as $sub=>$value)    {
                 $data[$sub] =  $value;    
                        }
-                    
+                
             update_option($option ['key'], $data);                         
           } else {
             update_option($option ['key'], $option['value']);     
@@ -166,13 +166,5 @@ $awpi->eleAutomatics_switch_theme();
 $awpi->eleAutomatics_do_custom_options();
 }
 add_action( 'wp_install', 'eleAutmaticsAutoCreaterInstall' );
-function eleAutmaticsAutoCreaterInstallTEST(){
-     $awpi = new AutoWPInstance();
-    $awpi->plugin_activation('eleAutomaticsAutoInstaller/eleAutomaticsAutoInstaller.php');
-     //$awpi->eleAutomatics_deactivate_plugins();
-    $awpi->eleAutomatics_activate_plugins();
-     $awpi->eleAutomatics_switch_theme();
-    $awpi->eleAutomatics_do_custom_options();
-    }
-//add_action( 'admin_init', 'eleAutmaticsAutoCreaterInstallTEST' );
+
 ?>
