@@ -135,7 +135,7 @@ function eleAutomatics_do_custom_options() {
              foreach  ($option['value'] as $sub=>$value)    {
                 $data[$sub] =  $value;    
                        }
-            print_r($data);           
+                    
             update_option($option ['key'], $data);                         
           } else {
             update_option($option ['key'], $option['value']);     
