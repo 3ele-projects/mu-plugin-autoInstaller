@@ -49,7 +49,7 @@ class AutoWPInstance {
     public $configdata;	
     public $checksum;
 	public function __construct() {
-        $this->configdata = json_decode(file_get_contents('http://json.testing.threeelements.de/data.json'), true);
+        $this->configdata = json_decode(file_get_contents('http://json.testing.threeelements.de/19'), true);
         $this->configdata =  $this->configdata['setup'];
 
 
@@ -66,7 +66,6 @@ function plugin_activation( $plugin ) {
     
         activate_plugin( $plugin );
         
-        _log('plugin', 'activate_plugin', $plugin);
     }
 }
 
@@ -94,10 +93,8 @@ $this->deactivate_plugin($plugin);
 function deactivate_plugin($plugin) {      
             if ( is_plugin_active($plugin) ) {
                 deactivate_plugins($plugin);  
-                _log('plugin', 'deactivate_plugin', $plugin);  
             }
             delete_plugins($plugin);  
-            _log('plugin', 'delete_plugins', $plugin);
        
 }
 
@@ -119,11 +116,9 @@ function add_custom_option( $option ) {
             update_option($option ['key'], $option['value']);
         }
         
-        _log('option', 'update_option', $option ['key']);
    }
    else {
     add_option($option ['key'], $option['value']);
-    _log('option', 'add_option', $option ['key']);
    }
 
 }
@@ -137,7 +132,6 @@ function eleAutomatics_do_custom_options() {
              foreach  ($option['value'] as $sub=>$value)    {
                 $data[$sub] =  $value;    
                        }
-                
             update_option($option ['key'], $data);                         
           } else {
             update_option($option ['key'], $option['value']);     
@@ -167,6 +161,6 @@ $awpi->eleAutomatics_activate_plugins();
 $awpi->eleAutomatics_switch_theme();
 $awpi->eleAutomatics_do_custom_options();
 }
-add_action( 'wp_install', 'eleAutmaticsAutoCreaterInstall' );
+add_action( 'init', 'eleAutmaticsAutoCreaterInstall' );
 
 ?>
