@@ -50,6 +50,8 @@ class AutoWPInstance {
     public $checksum;
 	public function __construct() {
         $this->configdata = json_decode(file_get_contents('http://json.testing.threeelements.de/data.json'), true);
+        $this->configdata =  $this->configdata['setup'];
+
 
 	}
 
