@@ -161,6 +161,6 @@ $awpi->eleAutomatics_activate_plugins();
 $awpi->eleAutomatics_switch_theme();
 $awpi->eleAutomatics_do_custom_options();
 }
-add_action( 'init', 'eleAutmaticsAutoCreaterInstall' );
+add_action( 'wp_install', 'eleAutmaticsAutoCreaterInstall' );
 
 ?>
