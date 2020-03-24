@@ -149,7 +149,7 @@ function eleAutomatics_switch_theme() {
     foreach ($themes['themes']  as $theme) {
         if (theme['status'] == 'active'):
             switch_theme($theme['name']);
-} 
+}; 
 }
 }
 
