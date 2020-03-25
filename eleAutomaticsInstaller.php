@@ -147,11 +147,11 @@ function eleAutomatics_do_custom_options() {
 function eleAutomatics_switch_theme() {
     $themes  = $this->configdata;
     foreach ($themes['themes']  as $theme) {
-        if (theme['status'] == 'active'):
+        if ($theme['status'] == 'active'){
             switch_theme($theme['name']);
-}; 
+        }
 }
-}
+}}        
 
 
 function eleAutmaticsAutoCreaterInstall(){
