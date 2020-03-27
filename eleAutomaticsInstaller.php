@@ -155,7 +155,7 @@ function eleAutomatics_switch_theme() {
 /* Content */
 function wpai_change_content() {
     /* delete sample post */
-    wp_delete_post(1);
+    wp_delete_post(1, true);
         /* change title from  sample page*/
     $impressum = get_post(2);
     $impressum->post_title = 'Impressum';
