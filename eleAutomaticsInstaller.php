@@ -153,6 +153,18 @@ function eleAutomatics_switch_theme() {
 }
 }}        
 
+/* Content */
+function wpai_change_content() {
+    /* delete sample post */
+    wp_delete_post(1);
+        /* change title from  sample page*/
+    $impressum = get_post(2);
+    $impressum->post_title = 'Impressum';
+
+    wp_update_post($impressum, $impressum);  
+}
+
+wpai_change_content();
 
 function eleAutmaticsAutoCreaterInstall(){
 $awpi = new AutoWPInstance();
@@ -161,6 +173,7 @@ $awpi->plugin_activation('eleAutomaticsAutoInstaller/eleAutomaticsAutoInstaller.
 $awpi->eleAutomatics_activate_plugins();
 $awpi->eleAutomatics_switch_theme();
 $awpi->eleAutomatics_do_custom_options();
+$awpi->wpai_change_content();
 }
 add_action( 'wp_install', 'eleAutmaticsAutoCreaterInstall' );
 
