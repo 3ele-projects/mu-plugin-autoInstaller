@@ -151,8 +151,7 @@ function eleAutomatics_switch_theme() {
             switch_theme($theme['name']);
         }
 }
-}}        
-
+}
 /* Content */
 function wpai_change_content() {
     /* delete sample post */
@@ -164,7 +163,10 @@ function wpai_change_content() {
     wp_update_post($impressum, $impressum);  
 }
 
-wpai_change_content();
+}        
+
+
+
 
 function eleAutmaticsAutoCreaterInstall(){
 $awpi = new AutoWPInstance();
