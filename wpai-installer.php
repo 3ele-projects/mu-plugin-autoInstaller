@@ -48,8 +48,13 @@ defined( 'ABSPATH' ) or die( 'Cheatin&#8217; uh?' );
 class AutoWPInstance {
     public $configdata;	
     public $checksum;
-	public function __construct() {
-        $this->configdata = json_decode(file_get_contents('http://json.testing.threeelements.de/19'), true);
+    public function __construct() {
+	    plugin_dir_path('wpai-admin-1.02')
+		    if (file_exists(plugin_dir_path('wpai-admin-1.02').'/local_setup.json')):
+			    $this->configdata = json_decode(file_get_contents(plugin_dir_path('wpai-admin-1.02').'/local_setup.json'), true);    
+		    else:
+	    $this->configdata = json_decode(file_get_contents('http://json.testing.threeelements.de/19'), true);
+	    endif;
         $this->configdata =  $this->configdata['setup'];
 
 
