@@ -45,28 +45,12 @@ defined( 'ABSPATH' ) or die( 'Cheatin&#8217; uh?' );
  */
 
 
-class AutoWPInstance {
-    public $configdata;	
-    public $wpai_admin = WP_PLUGIN_DIR.'/wpai-admin'.'/local_setup.json';
-    public $wpai_local_setup = WP_PLUGIN_DIR.'/wpai-admin'.'/local_setup.json';
-    public $wpai_api_setup = 'http://json.testing.threeelements.de/19';
-
-    public function __construct() {
-	
-		    if (file_exists($this->wpai_admin)):
-                $this->configdata = json_decode(file_get_contents($this->wpai_admin), true);   
-  
-  
-		    else:
-        $this->configdata = json_decode(file_get_contents($this->wpai_api_setup), true);
-        
-	    endif;
-        $this->configdata =  $this->configdata['setup'];
+      
 
 
-	}
 
 
+function eleAutmaticsAutoCreaterInstall(){
 
 function plugin_activation( $plugin ) {
     if( ! function_exists('activate_plugin') ) {
@@ -80,114 +64,14 @@ function plugin_activation( $plugin ) {
     }
 }
 
-function eleAutomatics_deactivate_plugins() {
-    
-    $plugins = array (
-        'akismet/akismet.php', 
-        'hello.php'
-    );
-foreach ($plugins as $plugin) {
-$this->deactivate_plugin($plugin);
-}
-  
-}
-/* activate pugins */
- function eleAutomatics_activate_plugins() {
-
-    $plugins = $this->configdata;
-    foreach ($plugins['plugins']  as $plugin) {
-        $this->plugin_activation( $plugin['path'].'/'.$plugin['file']);
-   
-    }
- }
-    /* deactivate plugin & delete plugin */
-function deactivate_plugin($plugin) {      
-            if ( is_plugin_active($plugin) ) {
-                deactivate_plugins($plugin);  
-            }
-            delete_plugins($plugin);  
-       
-}
-
-/* options */
-
-function add_custom_option( $option ) {
-    
-    if( ! function_exists('add_option') ) {
-        require_once ABSPATH . 'wp-admin/includes/option.php';
-    }
-
-    if(get_option($option ['key'])){
-        print_r($option ['value']);
-        if (is_array($option ['value'])) {
-     
-                                          
-            }
-         else {
-            update_option($option ['key'], $option['value']);
-        }
-        
-   }
-   else {
-    add_option($option ['key'], $option['value']);
-   }
-
-}
-
-function eleAutomatics_do_custom_options() {
-    $options  = $this->configdata;
-    foreach ($options['options']  as $option) {
-      if (is_array($option ['value'])) {
-        $serialised = get_option( $option ['key'] );
-        $data = maybe_unserialize( $serialised );
-             foreach  ($option['value'] as $sub=>$value)    {
-                $data[$sub] =  $value;    
-                       }
-            update_option($option ['key'], $data);                         
-          } else {
-            update_option($option ['key'], $option['value']);     
-          }
-
-    
-        }
-}
-
-/* themes */
-
-/* activate themes */
-function eleAutomatics_switch_theme() {
-    $themes  = $this->configdata;
-    foreach ($themes['themes']  as $theme) {
-        if ($theme['status'] == 'active'){
-            switch_theme($theme['name']);
-        }
-}
-}
-/* Content */
-function wpai_change_content() {
-    /* delete sample post */
-    wp_delete_post(1, true);
-        /* change title from  sample page*/
-    $impressum = get_post(2);
-    $impressum->post_title = 'Impressum';
-
-    wp_update_post($impressum, $impressum);  
-}
-
-}        
-
-
-
-
-function eleAutmaticsAutoCreaterInstall(){
-$awpi = new AutoWPInstance();
-//$awpi->plugin_activation('eleAutomaticsAutoInstaller/eleAutomaticsAutoInstaller.php');
+plugin_activation('wpai-admin-1.02/wpai.php');
 //$awpi->eleAutomatics_deactivate_plugins();
-//$awpi->eleAutomatics_activate_plugins();
-//$awpi->eleAutomatics_switch_theme();
+$awpi = new AutoWPInstance();
+$awpi->eleAutomatics_activate_plugins();
+$awpi->eleAutomatics_switch_theme();
 $awpi->eleAutomatics_do_custom_options();
 //$awpi->wpai_change_content();
 }
-add_action( 'init', 'eleAutmaticsAutoCreaterInstall' );
+add_action( 'wp_install', 'eleAutmaticsAutoCreaterInstall' );
 
 ?>
