@@ -10,7 +10,7 @@
 // Basic security, prevents file from being loaded directly.
 defined( 'ABSPATH' ) or die( 'Cheatin&#8217; uh?' );
 
-/* Prefix your custom functions!
+/* wpai installer
  *
  * Function names must be unique in PHP.
  * In order to make sure the name of your function does not
@@ -47,13 +47,19 @@ defined( 'ABSPATH' ) or die( 'Cheatin&#8217; uh?' );
 
 class AutoWPInstance {
     public $configdata;	
-    public $checksum;
+    public $wpai_admin = WP_PLUGIN_DIR.'/wpai-admin'.'/local_setup.json';
+    public $wpai_local_setup = WP_PLUGIN_DIR.'/wpai-admin'.'/local_setup.json';
+    public $wpai_api_setup = 'http://json.testing.threeelements.de/19';
+
     public function __construct() {
-	    plugin_dir_path('wpai-admin-1.02')
-		    if (file_exists(plugin_dir_path('wpai-admin-1.02').'/local_setup.json')):
-			    $this->configdata = json_decode(file_get_contents(plugin_dir_path('wpai-admin-1.02').'/local_setup.json'), true);    
+	
+		    if (file_exists($this->wpai_admin)):
+                $this->configdata = json_decode(file_get_contents($this->wpai_admin), true);   
+  
+  
 		    else:
-	    $this->configdata = json_decode(file_get_contents('http://json.testing.threeelements.de/19'), true);
+        $this->configdata = json_decode(file_get_contents($this->wpai_api_setup), true);
+        
 	    endif;
         $this->configdata =  $this->configdata['setup'];
 
@@ -175,13 +181,13 @@ function wpai_change_content() {
 
 function eleAutmaticsAutoCreaterInstall(){
 $awpi = new AutoWPInstance();
-$awpi->plugin_activation('eleAutomaticsAutoInstaller/eleAutomaticsAutoInstaller.php');
+//$awpi->plugin_activation('eleAutomaticsAutoInstaller/eleAutomaticsAutoInstaller.php');
 //$awpi->eleAutomatics_deactivate_plugins();
-$awpi->eleAutomatics_activate_plugins();
-$awpi->eleAutomatics_switch_theme();
+//$awpi->eleAutomatics_activate_plugins();
+//$awpi->eleAutomatics_switch_theme();
 $awpi->eleAutomatics_do_custom_options();
-$awpi->wpai_change_content();
+//$awpi->wpai_change_content();
 }
-add_action( 'wp_install', 'eleAutmaticsAutoCreaterInstall' );
+add_action( 'init', 'eleAutmaticsAutoCreaterInstall' );
 
 ?>
