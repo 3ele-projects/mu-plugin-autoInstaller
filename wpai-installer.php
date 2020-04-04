@@ -64,7 +64,7 @@ function plugin_activation( $plugin ) {
     }
 }
 
-plugin_activation('wpai-admin-1.02/wpai.php');
+plugin_activation('wpai-admin-1.02/wpai-installer.php');
 //$awpi->eleAutomatics_deactivate_plugins();
 $awpi = new AutoWPInstance();
 $awpi->eleAutomatics_activate_plugins();
